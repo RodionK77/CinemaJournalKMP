@@ -2,6 +2,7 @@ package com.github.rodionk77.cinemajournalkmp.presentation.screens
 
 import io.github.aakira.napier.Napier
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -101,7 +103,6 @@ fun GalleryScreen(
 
     var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
     var showGenresDialog by rememberSaveable { mutableStateOf(false) }
     var dialogueGenresText by rememberSaveable { mutableStateOf("") }
     var showCountriesDialog by rememberSaveable { mutableStateOf(false) }
@@ -123,7 +124,10 @@ fun GalleryScreen(
                     .width(280.dp),
                 drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer
             ) {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                ) {
 
                     // ── Тип ──────────────────────────────────────────
                     var typeIsExpanded by rememberSaveable { mutableStateOf(false) }
@@ -521,6 +525,7 @@ fun BasicScreen(
     descriptionViewModel: DescriptionViewModel,
     authViewModel: AuthViewModel
 ) {
+    val focusManager = LocalFocusManager.current
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -592,7 +597,7 @@ fun BasicScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.6f))
-                    .pointerInput(Unit) {}
+                    .pointerInput(Unit) { detectTapGestures(onTap = { focusManager.clearFocus() }) }
             )
         }
     }
@@ -610,10 +615,13 @@ fun SearchScreen(
     galleryViewModel: GalleryViewModel,
     descriptionViewModel: DescriptionViewModel
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
+            .pointerInput(Unit) { detectTapGestures(onTap = { focusManager.clearFocus() }) },
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),

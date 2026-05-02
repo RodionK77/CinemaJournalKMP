@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import cinemajournalkmp.composeapp.generated.resources.ic_add
 import cinemajournalkmp.composeapp.generated.resources.ic_delete
 import org.jetbrains.compose.resources.painterResource
@@ -76,13 +79,15 @@ fun ContentAdditionScreen(navController: NavController, additionViewModel: Addit
     var showDialog by rememberSaveable { mutableStateOf(false) }
     var dialogueText by rememberSaveable { mutableStateOf("") }
     var dialogueSate by rememberSaveable { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.onSecondary)
             .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .pointerInput(Unit) { detectTapGestures(onTap = { focusManager.clearFocus() }) },
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Spacer(Modifier.height(4.dp))

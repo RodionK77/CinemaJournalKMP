@@ -4,6 +4,7 @@ package com.github.rodionk77.cinemajournalkmp.presentation.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -99,6 +102,7 @@ fun ContentReviewScreen(navController: NavController, reviewViewModel: ReviewVie
 
 @Composable
 private fun Content(reviewViewModel: ReviewViewModel, authViewModel: AuthViewModel) {
+    val focusManager = LocalFocusManager.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -106,7 +110,8 @@ private fun Content(reviewViewModel: ReviewViewModel, authViewModel: AuthViewMod
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.onSecondary)
             .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .pointerInput(Unit) { detectTapGestures(onTap = { focusManager.clearFocus() }) },
     ) {
 
         val descriptionIsExpanded = rememberSaveable { mutableStateOf(false) }
